@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Exclusions</title>
+		<meta name="viewport" content="initial-scale=0.5,minimum-scale=0.5,maximum-scale=0.5,width=device-width,user-scalable=no">
+		<link rel="stylesheet" href="overlock/stylesheet.css">
+		<style media="screen">
+			body {
+				background: #333;
+				margin: 0;
+				padding: 0;
+			}
+			#content {
+				background: #fff;
+				width: 2560px;
+				height: 1280px;
+				position: absolute;
+				top: 0;
+				left: 0;
+				overflow: hidden;
+				font: 30px OverlockRegular;
+			}
+			#plate,
+			#ing1,
+			#ing2,
+			#ing3 {
+				position: absolute;
+				background-size: cover;
+			}
+			#plate {
+				top: -200px;
+				left: 1860px;
+				width: 800px;
+				height: 800px;
+				background-image: url(plate.jpg);
+			}
+			#ing1 {
+				bottom: 50px;
+				left: 100px;
+				width: 500px;
+				height: 300px;
+				background-image: url(garlic.jpg);
+				background-position: 50% 50%;
+				opacity: .5;
+			}
+			#ing2 {
+				bottom: 300px;
+				left: 400px;
+				width: 300px;
+				height: 300px;
+				background-image: url(capsicum1.jpg);
+				opacity: .5;
+			}
+			#ing3 {
+				bottom: 600px;
+				left: 400px;
+				width: 200px;
+				height: 200px;
+				background-image: url(capsicum2.jpg);
+				opacity: .4;
+			}
+			body.si .em,
+			body.em .si {
+				display: none;
+			}
+			h1 {
+				position: absolute;
+				top: 20px;
+				left: 20px;
+				font: 400 170px OverlockBold;
+				margin: 0;
+				padding: 0;
+			}
+			#rate {
+				position: absolute;
+				top: 200px;
+				left: 20px;
+				font-size: 40px;
+			}
+			#steps {
+				position: absolute;
+				top: 140px;
+				left: 800px;
+				font-size: 35px;
+			}
+			#steps ol {
+				margin-left: 70px;
+			}
+			#steps p {
+				margin: 0;
+				padding: 0 0 10px 0;
+			}
+			#steps span {
+				color: #c00;
+			}
+			#ingredients {
+				font-size: 35px;
+				position: absolute;
+				top: 140px;
+				left: 20px;
+				width: 700px;
+			}
+			h2 {
+				margin: 140px 0 40px;
+				padding: 0;
+				font-size: 80px;
+				font-family: OverlockSCRegular;
+				color: #c30;
+			}
+			#ingredients h3 {
+				padding: 20px 0 40px;
+				margin: 0;
+				clear: both;
+			}
+			#ingredients dl {
+				float: left;
+				margin: 0;
+			}
+			#ingredients dt {
+				clear: left;
+				width: 250px;
+			}
+			#ingredients dd,
+			#ingredients dt {
+				float: left;
+				margin-right: .25em;
+			}
+			h2 {
+				clear: both;
+			}
+			svg {
+				position: absolute;
+				top: 300px;
+				left: 600px;
+				display: none;
+			}
+			@media screen and (max-width: 1600px) {
+				#content {
+					width: 1600px;
+					height: 2240px;
+				}
+				#plate {
+					top: 200px;
+					left: 1000px;
+				}
+				h1 {
+					width: 1600px;
+					text-align: center;
+				}
+				#steps {
+					top: 300px;
+					left: 600px;
+					width: 800px;
+					font-size: 35px;
+				}
+				#ingredients {
+					top: 300px;
+				}
+				#steps,
+				#ingredients {
+					font-size: 40px;
+				}
+			}
+		</style>
+		<script>
+			window.onload = function () {
+				function getPolygon(p) {
+					var l = p.getTotalLength(),
+						res = [];
+					for (var i = 0; i < l; i += 40) {
+						var dot = p.getPointAtLength(i);
+						res.push(~~dot.x + "px " + ~~dot.y + "px");
+					}
+					return res.join();
+				}
+				function sub(x, y, w, h, cx, cy, r) {
+					function dist(x, y, x2, y2) {
+						return	Math.sqrt(Math.pow(x2 - x, 2) +
+								Math.pow(y2 - y, 2));
+					}
+					var big = cx < x + w && cx > x && cy > y && cy < y + h;
+					function getXY(xy) {
+						var out;
+						if ("y" in xy) {
+							var Y = xy.y,
+								D = 4 * cx * cx -
+									4 * (cx * cx + Math.pow(Y - cy, 2) - r * r);
+							if (D >= 0) {
+								out = [
+									(2 * cx + Math.sqrt(D)) / 2,
+									(2 * cx - Math.sqrt(D)) / 2
+								];
+								(out[1] >= x + w || out[1] <= x) && out.pop();
+								(out[0] >= x + w || out[0] <= x) && out.shift();
+								return out.length ? out : null;
+							} else {
+								return null;
+							}
+						} else {
+							var X = xy.x;
+							D = 4 * cy * cy -
+								4 * (cy * cy + Math.pow(X - cx, 2) - r * r);
+							if (D >= 0) {
+								out = [
+									(2 * cy + Math.sqrt(D)) / 2,
+									(2 * cy - Math.sqrt(D)) / 2
+								];
+								(out[1] >= y + h || out[1] <= y) && out.pop();
+								(out[0] >= y + h || out[0] <= y) && out.shift();
+								return out.length ? out : null;
+							} else {
+								return null;
+							}
+						}
+					}
+					function getPath() {
+						function run(xy, mid, mid2, end, dir) {
+							if (xy) {
+								if (xy.length - 1) {
+									if (!dir) {
+										var t = mid;
+										mid = mid2;
+										mid2 = t;
+									}
+									res +=	"L" + mid2 +
+											"A" + [r, r, 0, +big, 0].concat(mid)
+											+ "L" + end;
+								} else {
+									if (out) {
+										res += "L" + mid;
+									} else {
+										res +=
+											"A" + [r, r, 0, 0, 0].concat(mid) +
+											"L" + end;
+									}
+									out = !out;
+								}
+							} else if (out) {
+								res += "L" + end;
+							}
+						}
+						var out = true,
+							res = "",
+							points = [
+								[x, y, "y"],
+								[x + w, y, "x"],
+								[x + w, y + h, "y"],
+								[x, y + h, "x"]
+							],
+							fs = {
+								x: function (i) {
+									var p = points[i];
+									xy = getXY({x: p[0]});
+									mid = xy && [p[0], xy[0]];
+									mid2 = xy && [p[0], xy[1]];
+									var next = points[i + 1] || points[0];
+									end = [next[0], next[1]];
+									run(xy, mid, mid2, end, p[1] < next[1]);
+								},
+								y: function (i) {
+									var p = points[i];
+									xy = getXY({y: p[1]});
+									mid = xy && [xy[0], p[1]];
+									mid2 = xy && [xy[1], p[1]];
+									var next = points[i + 1] || points[0];
+									end = [next[0], next[1]];
+									run(xy, mid, mid2, end, p[0] < next[0]);
+								}
+							},
+							xy, mid, mid2, end, cornerIn, shifted;
+						for (var j = 0; j < points.length; j++) {
+							var p = points[0];
+							if (dist(p[0], p[1], cx, cy) > r) {
+								res = "M" + [p[0], p[1]];
+								break;
+							} else {
+								points.push(points.shift());
+							}
+						}
+						if (!res) {
+							return "M0,0";
+						}
+						for (j = 0; j < points.length; j++) {
+							fs[points[j][2]](j);
+						}
+						return res + "z";
+					}
+					return getPath();
+				}
+				var p = document.getElementById("path"),
+					steps = document.getElementById("steps"),
+					plate = document.getElementById("plate"),
+					ing = [
+						document.getElementById("ing1"),
+						document.getElementById("ing2"),
+						document.getElementById("ing3")
+					];
+				function spread(val01, start, end) {
+					return start + (end - start) * val01;
+				}
+				function bit() {
+					bit.bit = bit.bit || 0;
+					bit.bit++;
+					if (bit.bit > 10) {
+						bit.bit = 0;
+					}
+					return bit.bit;
+				}
+				function plateUpdate(b, g) {
+					var o = window.orientation;
+					if (o == 180 || o == 90) {
+						b = -b;
+						g = -g;
+					}
+					if (o == 0 || o == 180) {
+						p.setAttribute("d", sub(0, 0, 1450, 1320, 1460,
+							spread((b + 90) / 180, 60, 940), 400));
+						steps.style.WebkitShapeInside =
+							"polygon(" + getPolygon(p) + ")";
+						steps.style.width = 1450 + bit() + "px";
+						plate.style.top = spread((b + 90) / 180, -200, 680) +
+							"px";
+						ing[0].style.marginLeft = Math.round(g * 4) + "px";
+						ing[1].style.marginLeft = Math.round(g) + "px";
+						ing[2].style.marginLeft = Math.round(g / 4) + "px";
+					} else {
+						p.setAttribute("d", sub(0, 0, 800, 1940, 800,
+							spread((g + 90) / 180, 100, 1440), 400));
+						steps.style.WebkitShapeInside =
+							"polygon(" + getPolygon(p) + ")";
+						steps.style.width = 980 + bit() + "px";
+						plate.style.top = spread((g + 90) / 180, 0, 1340) +
+							"px";
+						ing[0].style.marginLeft = Math.round(b * 4) + "px";
+						ing[1].style.marginLeft = Math.round(b) + "px";
+						ing[2].style.marginLeft = Math.round(b / 4) + "px";
+					}
+				}
+				window.addEventListener("deviceorientation", function (event) {
+					plateUpdate(event.beta, event.gamma);
+				}, true);
+			};
+		</script>
+	</head>
+	<body class="em">
+		<div id="content">
+			<div id="plate"></div>
+			<div id="ing1"></div>
+			<div id="ing2"></div>
+			<div id="ing3"></div>
+			<h1>Chicken Roll with Capsicum</h1>
+			<div id="rate">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+			<div id="cake-side"></div>
+			<div id="ingredients">
+				<h2>Ingredients</h2>
+				<dl>
+					<dt>Chicken fillets</dt>
+					<dd>2</dd>
+					<dt>Bacon</dt>
+					<dd>10</dd>
+					<dt>Mozzarella</dt>
+					<dd class="si">80 g</dd>
+					<dd class="em">2½ oz</dd>
+					<dt>Red capsicum</dt>
+					<dd>1</dd>
+					<dt>Yellow capsicum</dt>
+					<dd>1</dd>
+					<dt>Garlic</dt>
+					<dd>1 tooth</dd>
+					<dt>Oil</dt>
+					<dd>2 tbspoons</dd>
+					<dt>Oregano</dt>
+					<dd>1 tspoon</dd>
+					<dt>Parsley</dt>
+					<dd>medium bunch</dd>
+					<dt>Pepper</dt>
+					<dt>Salt</dt>
+				</dl>
+			</div>
+			<div id="steps">
+				<h2>Directions</h2>
+				<!-- <OL> is buggy, when exclusion applied -->
+				<p><span>&#9312;</span> Cook capsicums in the oven at
+					<span class="si">190°C</span><span class="em">375°F</span>
+					for 30 minutes. Constantly turn them, so they cook from each
+					side.</p>
+				<p><span>&#9313;</span> Put capsicums into plastic bag and leave
+					for 10 minutes. Peel the skin and cut in slices.</p>
+				<p><span>&#9314;</span> Beat up fillets to give them as much
+					rectangle-like form as you can.</p>
+				<p><span>&#9315;</span> Place 5 pieces of bacon a wooden board
+					side by side with an overlap. Square of the bacon’s rag
+					should be slightly bigger than beaten fillet. Place fillet
+					on the bacon.</p>
+				<p><span>&#9316;</span> Add salt, pepper, oil and crashed
+					garlic.</p>
+				<p><span>&#9317;</span> Spray with oregano and chopped parsley.
+					Place red and yellow capsicum and dices of cheese.</p>
+				<p><span>&#9318;</span> Wrap in a roll and tight with a thread.
+				</p>
+				<p><span>&#9319;</span> Repeat with another fillet.</p>
+				<p><span>&#9320;</span> Heat oil on frying pan and roast rolls
+					until golden.</p>
+				<p><span>&#9321;</span> Place rolls in a tray and put into
+					preheat to
+					<span class="si">200°C</span><span class="em">390°F</span>
+					oven for 15 min.</p>
+				<p><span>&#9322;</span> Serve cold.</p>
+			</div>
+		</div>
+		<svg>
+			<path id="path" fill-opacity=".3"/>
+		</svg>
+	</body>
+</html>
