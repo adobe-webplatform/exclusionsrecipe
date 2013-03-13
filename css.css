@@ -1,0 +1,275 @@
+body {
+    background-color: #333;
+    background-image:
+        repeating-linear-gradient(
+            120deg,
+            rgba(255,255,255,.1),
+            rgba(255,255,255,.1) 1px,
+            transparent 1px,
+            transparent 60px),
+        repeating-linear-gradient(
+            60deg,
+            rgba(255,255,255,.1),
+            rgba(255,255,255,.1) 1px,
+            transparent 1px,
+            transparent 60px),
+        linear-gradient(
+            60deg,
+            rgba(0,0,0,.1) 25%,
+            transparent 25%,
+            transparent 75%,
+            rgba(0,0,0,.1) 75%,
+            rgba(0,0,0,.1)),
+        linear-gradient(
+            120deg,
+            rgba(0,0,0,.1) 25%,
+            transparent 25%,
+            transparent 75%,
+            rgba(0,0,0,.1) 75%,
+            rgba(0,0,0,.1));
+    background-size: 70px 120px;
+    margin: 0;
+    padding: 0;
+}
+#content {
+    background: #fff;
+    font: 50px OverlockRegular, "Helvetica Neue", sans-serif;
+    height: 100%;
+    left: 0;
+    max-width: 1500px;
+    min-width: 1000px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+#ing1,
+#ing2,
+#ing3 {
+    position: fixed;
+    background-size: cover;
+}
+#plate {
+    position: absolute;
+    top: -200px;
+    left: 100%;
+    margin-left: -300px;
+    width: 400px;
+    height: 400px;
+    background-image: url(plate.jpg);
+    background-size: cover;
+}
+#ing1 {
+    bottom: 50px;
+    left: 100px;
+    width: 250px;
+    height: 150px;
+    background-image: url(garlic.jpg);
+    background-position: 50% 50%;
+    opacity: .5;
+}
+#ing2 {
+    bottom: 200px;
+    left: 400px;
+    width: 150px;
+    height: 150px;
+    background-image: url(capsicum1.jpg);
+    opacity: .5;
+}
+#ing3 {
+    bottom: 350px;
+    left: 400px;
+    width: 100px;
+    height: 100px;
+    background-image: url(capsicum2.jpg);
+    opacity: .4;
+}
+body.si .em,
+body.em .si {
+    display: none;
+}
+h1 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font: 300 1.7em OverlockBold, "Helvetica Neue", sans-serif;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+#rate {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+    font-size: .4em;
+}
+#steps {
+    position: absolute;
+    top: 0;
+    left: 40%;
+    margin-right: 100px;
+    font-size: .35em;
+}
+#steps ol {
+    margin-left: 70px;
+}
+#steps p {
+    margin: 0;
+    padding: 0 0 10px 0;
+}
+#steps span {
+    color: #c00;
+}
+#ingredients {
+    font-size: .35em;
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 40%;
+}
+h2 {
+    margin: 140px 0 40px;
+    padding: 0;
+    font: 300 40px OverlockSCRegular, "Helvetica Neue", sans-serif;
+    color: #c30;
+}
+#ingredients h3 {
+    padding: 20px 0 40px;
+    margin: 0;
+    clear: both;
+}
+#ingredients dl {
+    float: left;
+    margin: 0;
+}
+#ingredients dt {
+    clear: left;
+    width: 7em;
+}
+#ingredients dd,
+#ingredients dt {
+    float: left;
+    margin-right: .25em;
+    margin-bottom: .5em;
+}
+h2 {
+    clear: both;
+}
+svg {
+    display: none;
+}
+@media only screen and (width: 2560px) and (orientation: landscape) {
+    html, body {
+        background: #fff;
+        width: 2560px;
+    }
+    #content {
+        font: 100px OverlockRegular, "Helvetica Neue", sans-serif;
+        width: 2560px;
+        height: 3000px;
+        max-width: 2560px;
+        min-width: 2560px;
+    }
+    #plate {
+        top: 200px;
+        right: -100px;
+        left: auto;
+        width: 800px;
+        height: 800px;
+        margin: 0;
+    }
+    h2 {
+        font-size: 50px;
+    }
+    #steps {
+        top: 300px;
+        left: 800px;
+        width: auto;
+        font-size: .35em;
+    }
+    #ingredients {
+        top: 300px;
+    }
+    #steps,
+    #ingredients {
+        font-size: .4em;
+    }
+    #ing1 {
+        width: 500px;
+        height: 300px;
+    }
+    #ing2 {
+        bottom: 40%;
+        width: 300px;
+        height: 300px;
+    }
+    #ing3 {
+        bottom: 70%;
+        width: 200px;
+        height: 200px;
+    }
+}
+@media only screen and (width: 1600px) and (orientation: portrait) {
+    html, body {
+        width: 1600px;
+    }
+    #content {
+        font-size: 80px;
+        width: 1600px;
+        max-width: 1600px;
+        min-width: 1600px;
+        height: 100%;
+        overflow-y: auto;
+    }
+    #rate {
+        display: none;
+    }
+    h1 {
+        font-size: 120px;
+    }
+    h2 {
+        font-size: 50px;
+    }
+    #steps,
+    #ingredients {
+        top: 30px;
+    }
+    #steps {
+        left: 0;
+        width: 100%;
+    }
+    #steps p,
+    #steps h2 {
+        margin-left: 600px;
+    }
+    #ing1 {
+        position: fixed;
+        bottom: 50px;
+        left: 100px;
+        width: 400px;
+        height: 300px;
+    }
+    #ing2 {
+        position: fixed;
+        bottom: 300px;
+        left: 300px;
+        width: 300px;
+        height: 300px;
+    }
+    #ing3 {
+        position: fixed;
+        bottom: 700px;
+        left: 400px;
+        width: 300px;
+        height: 300px;
+    }
+    #plate {
+        top: 200px;
+        left: auto;
+        margin: 0;
+        right: -300px;
+        width: 800px;
+        height: 800px;
+    }
+}
