@@ -163,9 +163,9 @@ window.onload = function () {
                 steps.offsetHeight, W, 240, 200));
             steps.style.WebkitShapeInside =
                 "polygon(" + getPolygon(p) + ")";
-            steps.style.borderBottom = "solid " + bit() + "px #000";
+            steps.style.borderBottom = "solid " + bit() + "px transparent";
             plate.style.top = "40px";
-        }
+        };
     }
     function portrait() {
         portrait.path = portrait.path || sub(0, 0, 900, 1940, 900, 670, 400);

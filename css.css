@@ -70,7 +70,7 @@ body {
     margin-left: -300px;
     width: 400px;
     height: 400px;
-    background-image: url(plate.jpg);
+    background-image: url(dish-isolated.png);
     background-size: cover;
 }
 #ing1 {
@@ -123,9 +123,7 @@ h1 {
     left: 40%;
     margin-right: 100px;
     font-size: .35em;
-}
-#steps ol {
-    margin-left: 70px;
+    line-height: 1.7;
 }
 #steps p {
     margin: 0;
