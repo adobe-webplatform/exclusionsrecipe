@@ -168,53 +168,61 @@ window.onload = function () {
         };
     }
     function portrait() {
-        portrait.path = portrait.path || sub(0, 0, 900, 1940, 900, 670, 400);
-        p.setAttribute("d", portrait.path);
+        p.setAttribute("d", sub(0, 0, 900, 6000, 900, 670, 400));
         steps.style.WebkitShapeInside =
             "polygon(" + getPolygon(p) + ")";
         steps.style.width = 2000 + bit() + "px";
         plate.style.top = "300px";
+        portrait = null;
     }
     function landscape() {
-        landscape.path = landscape.path ||
-            sub(0, 0, 1450, 1320, 1460, 500, 400);
-        p.setAttribute("d", landscape.path);
+        p.setAttribute("d", sub(0, 0, 1450, 6000, 1460, 500, 400));
         steps.style.WebkitShapeInside =
             "polygon(" + getPolygon(p) + ")";
             steps.style.width = 2000 + bit() + "px";
         plate.style.top = "400px";
+        landscape = null;
     }
     function plateUpdate(b, g) {
-        var o = window.orientation;
+        var o = window.orientation,
+            pos;
         if (o == 180 || o == 90) {
             b = -b;
             g = -g;
         }
         if (o == 0 || o == 180) {
-            landscape();
-            ing[0].style.marginLeft = Math.round(g * 4) + "px";
-            ing[1].style.marginLeft = Math.round(g) + "px";
-            ing[2].style.marginLeft = Math.round(g / 4) + "px";
+            pos = [g * 4, g, g / 4];
         } else {
             if (desktop) {
                 b = spread(b / window.innerWidth, -45, 45);
-                ing[0].style.marginLeft = Math.round(b * 4) + "px";
-                ing[1].style.marginLeft = Math.round(b) + "px";
-                ing[2].style.marginLeft = Math.round(b / 4) + "px";
+                pos = [b * 4, b, b / 4];
             } else {
-                portrait();
-                ing[0].style.marginLeft = Math.round(b * 4) + "px";
-                ing[1].style.marginLeft = Math.round(b) + "px";
-                ing[2].style.marginLeft = Math.round(b / 4) + "px";
+                pos = [b * 4, b, b / 4];
             }
+        }
+        for (var i = 0; i < pos.length; i++) {
+            ing[i].style.marginLeft = Math.round(pos[i]) + "px";
+        }
+    }
+    function orient() {
+        var o = window.orientation;
+        if (!o) {
+            return;
+        }
+        if (o == 0 || o == 180) {
+            landscape();
+        } else {
+            portrait();
         }
     }
     window.addEventListener("deviceorientation", function (event) {
         plateUpdate(event.beta, event.gamma);
-    }, true);
+    }, false);
+    window.addEventListener("orientationchange", orient, false);
     desktop && window.addEventListener("mousemove", function (event) {
         plateUpdate(event.pageX);
-    }, true);
-    desktop && window.addEventListener("resize", desktop, true);
+    }, false);
+    desktop && window.addEventListener("resize", desktop, false);
     desktop && desktop();
+    orient();
 };
