@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-window.onload = function () {
+window.addEventListener("DOMContentLoaded", function () {
     function support() {
         var style = window.getComputedStyle(document.body, null);
         return style ? "-webkit-shape-inside" in style : false;
@@ -27,8 +27,8 @@ window.onload = function () {
     }
     function sub(x, y, w, h, cx, cy, r) {
         function dist(x, y, x2, y2) {
-            return    Math.sqrt(Math.pow(x2 - x, 2) +
-                    Math.pow(y2 - y, 2));
+            return Math.sqrt(Math.pow(x2 - x, 2) +
+                   Math.pow(y2 - y, 2));
         }
         var big = cx < x + w && cx > x && cy > y && cy < y + h;
         function getXY(xy) {
@@ -230,10 +230,9 @@ window.onload = function () {
         window.addEventListener("resize", desktop, false);
         desktop();
     } else {
-        window.addEventListener("orientationchange", orient, false);
         orient();
     }
     if (!support()) {
         warning.className = "";
     }
-};
+}, false);
