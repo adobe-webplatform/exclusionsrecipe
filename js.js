@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 window.onload = function () {
+    function support() {
+        var style = window.getComputedStyle(document.body, null);
+        return style ? "-webkit-shape-inside" in style : false;
+    }
     function getPolygon(p) {
         var l = p.getTotalLength(),
             res = [];
@@ -135,26 +139,32 @@ window.onload = function () {
         }
         return getPath();
     }
-    var p = document.getElementById("path"),
-        content = document.getElementById("content"),
-        steps = document.getElementById("steps"),
-        plate = document.getElementById("plate"),
+    function get(id) {
+        return document.getElementById(id);
+    }
+    var p = get("path"),
+        warning = get("warning"),
+        content = get("content"),
+        steps = get("steps"),
+        plate = get("plate"),
         ing = [
-            document.getElementById("ing1"),
-            document.getElementById("ing2"),
-            document.getElementById("ing3")
+            get("ing1"),
+            get("ing2"),
+            get("ing3")
         ];
     function spread(val01, start, end) {
         return start + (end - start) * val01;
     }
-    function bit() {
-        bit.bit = bit.bit || 0;
-        bit.bit++;
-        if (bit.bit > 10) {
-            bit.bit = 0;
-        }
-        return bit.bit;
-    }
+    var bit = function () {
+        var b = 0;
+        return function () {
+            b++;
+            if (b > 10) {
+                b = 1;
+            }
+            return b;
+        };
+    }();
     if (!("orientation" in window)) {
         var desktop = function () {
             var W = content.offsetWidth;
@@ -173,17 +183,15 @@ window.onload = function () {
             "polygon(" + getPolygon(p) + ")";
         steps.style.width = 2000 + bit() + "px";
         plate.style.top = "300px";
-        portrait = null;
     }
     function landscape() {
         p.setAttribute("d", sub(0, 0, 1450, 6000, 1460, 500, 400));
         steps.style.WebkitShapeInside =
             "polygon(" + getPolygon(p) + ")";
-            steps.style.width = 2000 + bit() + "px";
+        steps.style.width = 2000 + bit() + "px";
         plate.style.top = "400px";
-        landscape = null;
     }
-    function plateUpdate(b, g) {
+    function parallaxUpdate(b, g) {
         var o = window.orientation,
             pos;
         if (o == 180 || o == 90) {
@@ -200,15 +208,12 @@ window.onload = function () {
                 pos = [b * 4, b, b / 4];
             }
         }
-        for (var i = 0; i < pos.length; i++) {
+        for (var i = 0; i < 3; i++) {
             ing[i].style.marginLeft = Math.round(pos[i]) + "px";
         }
     }
     function orient() {
         var o = window.orientation;
-        if (!o) {
-            return;
-        }
         if (o == 0 || o == 180) {
             landscape();
         } else {
@@ -216,13 +221,19 @@ window.onload = function () {
         }
     }
     window.addEventListener("deviceorientation", function (event) {
-        plateUpdate(event.beta, event.gamma);
+        parallaxUpdate(event.beta, event.gamma);
     }, false);
-    window.addEventListener("orientationchange", orient, false);
-    desktop && window.addEventListener("mousemove", function (event) {
-        plateUpdate(event.pageX);
-    }, false);
-    desktop && window.addEventListener("resize", desktop, false);
-    desktop && desktop();
-    orient();
+    if (desktop) {
+        window.addEventListener("mousemove", function (event) {
+            parallaxUpdate(event.pageX);
+        }, false);
+        window.addEventListener("resize", desktop, false);
+        desktop();
+    } else {
+        window.addEventListener("orientationchange", orient, false);
+        orient();
+    }
+    if (!support()) {
+        warning.className = "";
+    }
 };
