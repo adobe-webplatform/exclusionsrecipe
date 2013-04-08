@@ -67,9 +67,9 @@ body {
     position: absolute;
     top: -200px;
     left: 100%;
-    margin-left: -300px;
-    width: 400px;
-    height: 400px;
+    margin-left: -400px;
+    width: 600px;
+    height: 600px;
     background-image: url(dish-isolated.png);
     background-size: cover;
 }
@@ -122,7 +122,9 @@ h1 {
     top: 0;
     left: 40%;
     margin-right: 100px;
-    font-size: .35em;
+    font-size: .3em;
+    -webkit-hyphens: auto;
+    text-align: justify;
     line-height: 1.7;
 }
 #steps p {
@@ -207,10 +209,10 @@ svg,
     }
     #plate {
         top: 200px;
-        right: -100px;
+        right: -300px;
         left: auto;
-        width: 800px;
-        height: 800px;
+        width: 1000px;
+        height: 1000px;
         margin: 0;
     }
     h2 {

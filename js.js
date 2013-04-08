@@ -170,7 +170,7 @@ window.addEventListener("DOMContentLoaded", function () {
             var W = content.offsetWidth;
             W = Math.max(steps.offsetWidth, W - 100 - W * .4);
             p.setAttribute("d", sub(0, 140, steps.offsetWidth,
-                steps.offsetHeight, W, 240, 200));
+                steps.offsetHeight, W, 340, 330));
             steps.style.WebkitShapeInside =
                 "polygon(" + getPolygon(p) + ")";
             steps.style.borderBottom = "solid " + bit() + "px transparent";
@@ -178,14 +178,14 @@ window.addEventListener("DOMContentLoaded", function () {
         };
     }
     function portrait() {
-        p.setAttribute("d", sub(0, 0, 900, 6000, 900, 670, 400));
+        p.setAttribute("d", sub(0, 0, 900, 6000, 900, 670, 430));
         steps.style.WebkitShapeInside =
             "polygon(" + getPolygon(p) + ")";
         steps.style.width = 2000 + bit() + "px";
         plate.style.top = "300px";
     }
     function landscape() {
-        p.setAttribute("d", sub(0, 0, 1450, 6000, 1460, 500, 400));
+        p.setAttribute("d", sub(0, 0, 1450, 6000, 1560, 600, 530));
         steps.style.WebkitShapeInside =
             "polygon(" + getPolygon(p) + ")";
         steps.style.width = 2000 + bit() + "px";
@@ -230,6 +230,7 @@ window.addEventListener("DOMContentLoaded", function () {
         window.addEventListener("resize", desktop, false);
         desktop();
     } else {
+        window.addEventListener("orientationchange", orient, false);
         orient();
     }
     if (!support()) {
