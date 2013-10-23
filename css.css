@@ -70,8 +70,8 @@ body {
     margin-left: -400px;
     width: 600px;
     height: 600px;
-    background-image: url(dish-isolated.png);
-    background-size: cover;
+/*    background-image: url(dish-isolated.png);*/
+/*    background-size: cover;*/
 }
 #ing1 {
     bottom: 50px;
@@ -133,6 +133,14 @@ h1 {
 }
 #steps span {
     color: #c00;
+}
+#steps img{
+  margin: 00px -300px 0 0;
+  width: 600px;
+  height: 600px;
+  float: right;
+  -webkit-shape-outside: circle(50%, 50%, 300px);
+  -webkit-shape-margin: 20px;
 }
 #ingredients {
     font-size: .35em;
@@ -206,14 +214,6 @@ svg,
         height: 3000px;
         max-width: 2560px;
         min-width: 2560px;
-    }
-    #plate {
-        top: 200px;
-        right: -300px;
-        left: auto;
-        width: 1000px;
-        height: 1000px;
-        margin: 0;
     }
     h2 {
         font-size: 50px;
