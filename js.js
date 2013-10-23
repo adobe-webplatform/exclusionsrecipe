@@ -225,7 +225,7 @@ window.addEventListener("DOMContentLoaded", function () {
     }, false);
     if (desktop) {
         window.addEventListener("mousemove", function (event) {
-            parallaxUpdate(event.pageX);
+            // parallaxUpdate(event.pageX);
         }, false);
         window.addEventListener("resize", desktop, false);
         desktop();
