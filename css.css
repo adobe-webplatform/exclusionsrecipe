@@ -139,8 +139,10 @@ h1 {
   width: 600px;
   height: 600px;
   float: right;
-  -webkit-shape-outside: circle(50%, 50%, 300px);
+  -webkit-shape-outside: circle(300px at 50% 50%) border-box;
+  shape-outside: circle(300px at 50% 50%) border-box;
   -webkit-shape-margin: 20px;
+  shape-margin: 20px;
 }
 #ingredients {
     font-size: .35em;
